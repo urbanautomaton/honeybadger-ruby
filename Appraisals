@@ -8,7 +8,7 @@ if RUBY_PLATFORM !~ /java/
 end
 
 appraise 'rack' do
-  gem 'rack'
+  gem 'rack', Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.2.2') ? '~> 2.0' : '~> 1.6'
   gem 'sham_rack', require: false
 end
 
