@@ -143,10 +143,14 @@ module Honeybadger
 
       notice = Notice.new(config, opts)
 
+      info "before before_notify: #{notice.as_json[:request].inspect}"
+
       config.before_notify_hooks.each do |hook|
         break if notice.halted?
         with_error_handling { hook.call(notice) }
       end
+
+      info "after before_notify: #{notice.as_json[:request].inspect}"
 
       unless notice.api_key =~ NOT_BLANK
         error { sprintf('Unable to send error report: API key is missing. id=%s', notice.id) }
@@ -166,8 +170,10 @@ module Honeybadger
       info { sprintf('Reporting error id=%s', notice.id) }
 
       if opts[:sync] || config[:sync]
+        info "sending sync: #{notice.as_json[:request].inspect}"
         send_now(notice)
       else
+        info "sending async: #{notice.as_json[:request].inspect}"
         push(notice)
       end
 
