@@ -220,6 +220,8 @@ module Honeybadger
       info "component = #{component}"
       info "action = #{action}"
 
+      info "to_json (attempt 1) = #{to_json}"
+
       self.session = opts[:session][:data] if opts[:session] && opts[:session][:data]
 
       self.breadcrumbs = opts[:breadcrumbs] || Breadcrumbs::Collector.new(config)
@@ -227,7 +229,7 @@ module Honeybadger
       # Fingerprint must be calculated last since callback operates on `self`.
       self.fingerprint = fingerprint_from_opts(opts)
 
-      info "to_json = #{to_json}"
+      info "to_json (attempt 2) = #{to_json}"
     end
 
     # @api private
