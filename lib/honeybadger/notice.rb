@@ -10,6 +10,8 @@ require 'honeybadger/util/sanitizer'
 require 'honeybadger/util/request_hash'
 require 'honeybadger/util/request_payload'
 
+require 'honeybadger/logging'
+
 module Honeybadger
   # @api private
   NOTIFIER = {
@@ -50,6 +52,8 @@ module Honeybadger
     extend Forwardable
 
     include Conversions
+
+    include Honeybadger::Logging::Helper
 
     # @api private
     # The String character used to split tag strings.
@@ -201,6 +205,9 @@ module Honeybadger
       self.local_variables = local_variables_from_exception(exception, config)
       self.api_key = opts[:api_key] || config[:api_key]
       self.tags = construct_tags(opts[:tags]) | construct_tags(context[:tags])
+
+      info "opts = #{opts.inspect}"
+      info "request_hash = #{request_hash.inspect}"
 
       self.url       = opts[:url]        || request_hash[:url]      || nil
       self.action    = opts[:action]     || request_hash[:action]   || nil
