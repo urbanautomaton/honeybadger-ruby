@@ -1,6 +1,8 @@
 module Honeybadger
   module Util
     class Lambda
+      LAMBDA_EXECUTION_ENV = /^AWS_Lambda_/i.freeze
+
       AWS_ENV_MAP = {
         "_HANDLER" => "handler",
         "AWS_REGION" => "region",
@@ -14,7 +16,7 @@ module Honeybadger
 
       class << self
         def lambda_execution?
-          !!ENV["AWS_EXECUTION_ENV"]
+          !!(ENV.fetch("AWS_EXECUTION_ENV", "").match(LAMBDA_EXECUTION_ENV))
         end
 
         def normalized_data
