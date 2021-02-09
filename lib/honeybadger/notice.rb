@@ -217,12 +217,17 @@ module Honeybadger
       self.cgi_data  = opts[:cgi_data]   || request_hash[:cgi_data] || {}
       self.details   = opts[:details]    || {}
 
+      info "component = #{component}"
+      info "action = #{action}"
+
       self.session = opts[:session][:data] if opts[:session] && opts[:session][:data]
 
       self.breadcrumbs = opts[:breadcrumbs] || Breadcrumbs::Collector.new(config)
 
       # Fingerprint must be calculated last since callback operates on `self`.
       self.fingerprint = fingerprint_from_opts(opts)
+
+      info "to_json = #{to_json}"
     end
 
     # @api private
